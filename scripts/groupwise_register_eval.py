@@ -461,10 +461,6 @@ def _run_group_eval_dir(
         #             ],
         #         )
 
-        from pprint import pprint
-
-        pprint(groupimg_a_paths)
-        pprint(groupseg_a_paths)
         metrics = {}
         img_metric_names, grid_metric_names = [], []
         for m in list_of_eval_metrics:
