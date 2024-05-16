@@ -388,7 +388,9 @@ def _run_group_eval_dir(
             img_m = torch.tensor(np.load(groupimg_m_paths[i])).to(args.device)
             grid = torch.tensor(np.load(groupgrids_paths[i])).to(args.device)
             img_a = align_img(grid, img_m)
-            img_a_path = os.path.join(groupimg_a_dir, f"img_a_{i:03}.npy")
+            img_a_path = os.path.join(
+                groupimg_a_dir, f"img_a_{align_type_str}_{i:03}.npy"
+            )
             np.save(
                 img_a_path,
                 img_a.cpu().detach().numpy(),
@@ -397,7 +399,9 @@ def _run_group_eval_dir(
             if args.seg_available:
                 seg_m = torch.tensor(np.load(groupseg_m_paths[i])).to(args.device)
                 seg_a = align_img(grid, seg_m)
-                seg_a_path = os.path.join(groupseg_a_dir, f"seg_a_{i:03}.npy")
+                seg_a_path = os.path.join(
+                    groupseg_a_dir, f"seg_a_{align_type_str}_{i:03}.npy"
+                )
                 np.save(
                     seg_a_path,
                     seg_a.cpu().detach().numpy(),
