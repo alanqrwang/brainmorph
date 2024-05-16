@@ -331,13 +331,21 @@ def _run_group_eval_dir(
 
     groupimg_m_dir = os.path.join(group_dir, "img_m")
     groupseg_m_dir = os.path.join(group_dir, "seg_m")
-    groupimg_a_dir = os.path.join(group_dir, "img_a")
-    groupseg_a_dir = os.path.join(group_dir, "seg_a")
+    groupimg_a_dir = {
+        align_type_str: os.path.join(group_dir, f"img_a_{align_type_str}")
+        for align_type_str in list_of_eval_kp_aligns
+    }
+    groupseg_a_dir = {
+        align_type_str: os.path.join(group_dir, f"seg_a_{align_type_str}")
+        for align_type_str in list_of_eval_kp_aligns
+    }
     registration_results_dir = os.path.join(group_dir, "registration_results")
-    if not os.path.exists(groupimg_a_dir):
-        os.makedirs(groupimg_a_dir)
-    if not os.path.exists(groupseg_a_dir):
-        os.makedirs(groupseg_a_dir)
+    for subdir in groupimg_a_dir.values():
+        if not os.path.exists(subdir):
+            os.makedirs(subdir)
+    for subdir in groupseg_a_dir.values():
+        if not os.path.exists(subdir):
+            os.makedirs(subdir)
     if not os.path.exists(registration_results_dir):
         os.makedirs(registration_results_dir)
     # If number of files in group directory is less than 4, duplicate the first image to make 4.
@@ -373,7 +381,7 @@ def _run_group_eval_dir(
 
     print("\nComputing metrics and saving results...")
     for align_type_str, res_dict in registration_results.items():
-        print(f"\n{align_type_str}")
+        print(f"\n...for {align_type_str}")
         # Get all grid paths stored in registration_results directory
         groupgrids_paths = sorted(
             [
@@ -389,7 +397,7 @@ def _run_group_eval_dir(
             grid = torch.tensor(np.load(groupgrids_paths[i])).to(args.device)
             img_a = align_img(grid, img_m)
             img_a_path = os.path.join(
-                groupimg_a_dir, f"img_a_{align_type_str}_{i:03}.npy"
+                groupimg_a_dir[align_type_str], f"img_a_{align_type_str}_{i:03}.npy"
             )
             np.save(
                 img_a_path,
@@ -400,7 +408,7 @@ def _run_group_eval_dir(
                 seg_m = torch.tensor(np.load(groupseg_m_paths[i])).to(args.device)
                 seg_a = align_img(grid, seg_m)
                 seg_a_path = os.path.join(
-                    groupseg_a_dir, f"seg_a_{align_type_str}_{i:03}.npy"
+                    groupseg_a_dir[align_type_str], f"seg_a_{align_type_str}_{i:03}.npy"
                 )
                 np.save(
                     seg_a_path,
