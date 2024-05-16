@@ -9,8 +9,7 @@ It supports unimodal/multimodal pairwise and groupwise registration using rigid,
 BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqrwang/keymorph), a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints. 
 
 ## Updates
-- [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Detailed instructions under "BrainMorph" (paper to come!).
-- [Apr 2024] Released foundational model of KeyMorph for brain MRIs, called BrainMorph, which is trained on over 100K images at full resolution (256^3). Instructions under "BrainMorph".
+- [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Usage instructions under "Registering brain volumes" (paper to come!).
 
 ## Installation
 ```bash
@@ -72,7 +71,7 @@ Description of other important flags:
 + `--save_eval_to_disk` saves all outputs to disk. The default location is `./register_output/`.
 + `--visualize` plots a matplotlib figure of moving, fixed, and registered images overlaid with corresponding points.
 
-You can also replace filenames with directories to register all images in the directory.
+You can also replace filenames with directories to register all pairs of images in the directories.
 Note that the script expects corresponding image and segmentation pairs to have the same filename.
 ```bash
 python scripts/register.py \
@@ -90,6 +89,7 @@ python scripts/register.py \
 ```
 
 ### Groupwise registration
+To register a group of volumes:
 ```bash
 python scripts/register.py \
     --groupwise \
@@ -107,9 +107,7 @@ python scripts/register.py \
 ```
 
 ## TLDR in code
-The crux of the code is in the `forward()` function in `brainmorph/model.py`, which performs one forward pass through the entire BrainMorph pipeline.
-
-Here's a pseudo-code version of the function:
+Here's a pseudo-code version of the registration pipeline that BrainMorph uses.:
 ```python
 def forward(img_f, img_m, seg_f, seg_m, network, optimizer, kp_aligner):
     '''Forward pass for one mini-batch step. 
