@@ -14,7 +14,7 @@ setuptools.setup(
     author="Alan Q. Wang",
     author_email="alanqrwang@gmail.com",
     url="https://github.com/alanqrwang/brainmorph",
-    description="KeyMorph is a foundational keypoint model for robust and flexible brain MRI registration.",
+    description="BrainMorph is a foundational keypoint model for robust and flexible brain MRI registration.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
