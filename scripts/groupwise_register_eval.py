@@ -371,8 +371,9 @@ def _run_group_eval_dir(
         )
         # registration_results = {"bspline": {}}
 
+    print("\nComputing metrics and saving results...")
     for align_type_str, res_dict in registration_results.items():
-        print(align_type_str)
+        print(f"\n{align_type_str}")
         # Get all grid paths stored in registration_results directory
         groupgrids_paths = sorted(
             [
