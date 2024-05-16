@@ -113,12 +113,6 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size")
 
     parser.add_argument(
-        "--half_resolution",
-        action="store_true",
-        help="Evaluate on half-resolution models",
-    )
-
-    parser.add_argument(
         "--early_stop_eval_subjects",
         type=int,
         default=None,
@@ -164,7 +158,6 @@ def build_tio_subject(img_path, seg_path=None):
 
 
 def get_loaders(args):
-    args.seg_available = args.moving_seg is not None and args.fixed_seg is not None
     if os.path.isfile(args.moving) and os.path.isfile(args.fixed):
         if args.seg_available:
             moving = [build_tio_subject(args.moving, args.moving_seg)]
@@ -204,6 +197,29 @@ def get_loaders(args):
     )
     loaders = {"fixed": fixed_loader, "moving": moving_loader}
     return loaders
+
+
+def get_group_loader(args):
+    assert os.path.isdir(args.moving)
+    moving = []
+    img_dir = os.path.join(args.moving, "img_m")
+    seg_dir = os.path.join(args.moving, "seg_m")
+    for moving_name in os.listdir(img_dir):
+        moving_path = os.path.join(img_dir, moving_name)
+        if args.seg_available:
+            moving_seg_path = os.path.join(seg_dir, moving_name)
+        else:
+            moving_seg_path = None
+        moving.append(build_tio_subject(moving_path, moving_seg_path))
+
+    # Build dataset
+    moving_dataset = tio.SubjectsDataset(moving, transform=transform)
+    moving_loader = DataLoader(
+        moving_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+    )
+    return {"group": moving_loader}, len(moving_loader)
 
 
 def get_foundation_weights_path(weights_dir, num_keypoints, num_levels):
@@ -277,21 +293,21 @@ def get_model(args):
         registration_model.to(args.device)
         utils.summary(registration_model)
     elif args.registration_model == "itkelastix":
-        from keymorph.baselines.itkelastix import ITKElastix
+        from baselines.itkelastix import ITKElastix
 
         registration_model = ITKElastix()
     elif args.registration_model == "synthmorph":
 
-        from keymorph.baselines.voxelmorph import VoxelMorph
+        from baselines.voxelmorph import VoxelMorph
 
         registration_model = VoxelMorph(perform_preaffine_register=True)
     elif args.registration_model == "synthmorph-no-preaffine":
 
-        from keymorph.baselines.voxelmorph import VoxelMorph
+        from baselines.voxelmorph import VoxelMorph
 
         registration_model = VoxelMorph(perform_preaffine_register=False)
     elif args.registration_model == "ants":
-        from keymorph.baselines.ants import ANTs
+        from baselines.ants import ANTs
 
         registration_model = ANTs()
     else:
@@ -324,31 +340,29 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
-    # Data
-    if args.half_resolution:
-        transform = tio.Compose(
-            [
-                tio.Lambda(lambda x: x.permute(0, 1, 3, 2)),
-                tio.Resize(128),
-            ]
-        )
-    else:
-        transform = tio.Compose(
-            [
-                tio.ToCanonical(),
-                tio.Resample(1),
-                tio.Resample("img"),
-                tio.CropOrPad((256, 256, 256), padding_mode=0, include=("img",)),
-                tio.CropOrPad((256, 256, 256), padding_mode=0, include=("seg",)),
-            ],
-            include=("img", "seg"),
-        )
+    # Pre-processing transforms
+    transform = tio.Compose(
+        [
+            tio.ToCanonical(),
+            tio.Resample(1),
+            tio.Resample("img"),
+            tio.CropOrPad((256, 256, 256), padding_mode=0, include=("img",)),
+            tio.CropOrPad((256, 256, 256), padding_mode=0, include=("seg",)),
+        ],
+        include=("img", "seg"),
+    )
 
     # Loaders
-    loaders = get_loaders(args)
+    args.seg_available = args.moving_seg is not None and args.fixed_seg is not None
+    if args.groupwise:
+        group_loader, group_size = get_group_loader(args)
+        list_of_eval_names = ["group"]
+        list_of_group_sizes = [group_size]
+    else:
+        list_of_eval_names = [("fixed", "moving")]
+        loaders = get_loaders(args)
 
     # Evaluation parameters
-    list_of_eval_names = [("fixed", "moving")]
     list_of_eval_augs = ["rot0"]
 
     # Model
@@ -356,11 +370,7 @@ if __name__ == "__main__":
     registration_model.eval()
 
     # Checkpoint loading
-    if args.half_resolution and args.registration_model == "keymorph":
-        assert (
-            args.load_path is not None
-        ), "Must specify path for weights for half resolution models"
-    else:
+    if args.registration_model == "keymorph":
         args.load_path = get_foundation_weights_path(
             args.weights_dir, args.num_keypoints, args.num_levels_for_unet
         )
@@ -373,7 +383,6 @@ if __name__ == "__main__":
         )
 
     if args.groupwise:
-        print("running groupwise")
         run_group_eval(
             group_loader,
             registration_model,

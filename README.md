@@ -89,7 +89,7 @@ python scripts/register.py \
 ```
 
 ### Groupwise registration
-To register a group of volumes:
+To register a group of volumes, put the volumes in `./example_data/img_m`. If segmentations are available, put them in `./example_data/seg_m`. Then run:
 ```bash
 python scripts/register.py \
     --groupwise \
