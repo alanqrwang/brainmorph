@@ -4,8 +4,8 @@ import numpy as np
 import torch
 from scipy import ndimage
 from torch.testing import assert_close
-from brainmorph.layers import CenterOfMass2d, CenterOfMass3d
-from brainmorph.keypoint_aligners import RigidKeypointAligner, AffineKeypointAligner
+from keymorph.layers import CenterOfMass2d, CenterOfMass3d
+from keymorph.keypoint_aligners import RigidKeypointAligner, AffineKeypointAligner
 
 
 class TestCenterOfMass2d(unittest.TestCase):

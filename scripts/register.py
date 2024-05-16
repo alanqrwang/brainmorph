@@ -7,10 +7,10 @@ from argparse import ArgumentParser
 import torchio as tio
 from pathlib import Path
 
-from brainmorph.model import KeyMorph
-from brainmorph import utils
-from brainmorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
-from brainmorph.net import ConvNet
+from keymorph.model import KeyMorph
+from keymorph import utils
+from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
+from keymorph.net import ConvNet
 from scripts.pairwise_register_eval import run_eval
 from scripts.groupwise_register_eval import run_group_eval
 
@@ -277,21 +277,21 @@ def get_model(args):
         registration_model.to(args.device)
         utils.summary(registration_model)
     elif args.registration_model == "itkelastix":
-        from brainmorph.baselines.itkelastix import ITKElastix
+        from keymorph.baselines.itkelastix import ITKElastix
 
         registration_model = ITKElastix()
     elif args.registration_model == "synthmorph":
 
-        from brainmorph.baselines.voxelmorph import VoxelMorph
+        from keymorph.baselines.voxelmorph import VoxelMorph
 
         registration_model = VoxelMorph(perform_preaffine_register=True)
     elif args.registration_model == "synthmorph-no-preaffine":
 
-        from brainmorph.baselines.voxelmorph import VoxelMorph
+        from keymorph.baselines.voxelmorph import VoxelMorph
 
         registration_model = VoxelMorph(perform_preaffine_register=False)
     elif args.registration_model == "ants":
-        from brainmorph.baselines.ants import ANTs
+        from keymorph.baselines.ants import ANTs
 
         registration_model = ANTs()
     else:

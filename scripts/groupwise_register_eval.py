@@ -5,13 +5,13 @@ import torchio as tio
 import shutil
 import matplotlib.pyplot as plt
 
-from brainmorph import utils
-from brainmorph.utils import (
+from keymorph import utils
+from keymorph.utils import (
     align_img,
     save_dict_as_json,
 )
-from brainmorph.augmentation import random_affine_augment
-import brainmorph.loss_ops as loss_ops
+from keymorph.augmentation import random_affine_augment
+import keymorph.loss_ops as loss_ops
 
 
 def run_long_eval(

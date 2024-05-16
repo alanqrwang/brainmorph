@@ -3,14 +3,14 @@ import torch
 import numpy as np
 import torchio as tio
 
-from brainmorph import utils
-from brainmorph.utils import (
+from keymorph import utils
+from keymorph.utils import (
     align_img,
     save_dict_as_json,
 )
-from brainmorph.viz_tools import imshow_registration_2d, imshow_registration_3d
-from brainmorph.augmentation import affine_augment
-import brainmorph.loss_ops as loss_ops
+from keymorph.viz_tools import imshow_registration_2d, imshow_registration_3d
+from keymorph.augmentation import affine_augment
+import keymorph.loss_ops as loss_ops
 
 
 def run_eval(
