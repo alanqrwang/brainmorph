@@ -367,8 +367,6 @@ def _run_group_eval_dir(
     groupseg_m_paths = sorted(
         [os.path.join(groupseg_m_dir, f) for f in os.listdir(groupseg_m_dir)]
     )
-    groupimg_a_paths = []
-    groupseg_a_paths = []
 
     with torch.set_grad_enabled(False):
         registration_results = registration_model.groupwise_register(
@@ -387,6 +385,8 @@ def _run_group_eval_dir(
     print("\nComputing metrics and saving results...")
     for align_type_str, res_dict in registration_results.items():
         print(f"\n...for {align_type_str}")
+        groupimg_a_paths = []
+        groupseg_a_paths = []
         # Get all grid paths stored in registration_results directory
         groupgrids_paths = sorted(
             [
