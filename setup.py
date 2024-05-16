@@ -3,18 +3,18 @@ import os
 import sys
 
 here = os.path.abspath(os.path.dirname(__file__))
-sys.path.insert(0, os.path.join(here, "keymorph"))
+sys.path.insert(0, os.path.join(here, "brainmorph"))
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="keymorph",
+    name="brainmorph",
     version="1.0.0",
     author="Alan Q. Wang",
     author_email="alanqrwang@gmail.com",
-    url="https://github.com/alanqrwang/keymorph",
-    description="KeyMorph is a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints.",
+    url="https://github.com/alanqrwang/brainmorph",
+    description="KeyMorph is a foundational keypoint model for robust and flexible brain MRI registration.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
