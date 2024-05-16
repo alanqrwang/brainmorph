@@ -40,6 +40,8 @@ You can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw
 Download your preferred model(s) and put them in the folder specified by `--weights_dir` in the commands below.
 
 ## Registering brain volumes 
+To get started, check out the `tutorial.ipynb` notebook.
+
 ### Pairwise registration
 The script will automatically min-max normalize the images and resample to 1mm isotropic resolution.
 
