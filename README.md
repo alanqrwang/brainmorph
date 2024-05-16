@@ -1,33 +1,33 @@
-# KeyMorph and BrainMorph: Robust and Flexible Multi-modal Registration via Keypoint Detection
+# BrainMorph: A Foundational Keypoint Model for Robust and Flexible Brain MRI Registration
 
-KeyMorph is a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints. 
+
+BrainMorph is a foundation model for brain MRI registration.
+It is a deep learning-based model trained on over 100,000 brain MR images at full resolution (256x256x256).
+The model is robust to normal and diseased brains, a variety of MRI modalities, and skullstripped and non-skullstripped images.
 It supports unimodal/multimodal pairwise and groupwise registration using rigid, affine, or nonlinear transformations.
 
-BrainMorph is a foundation model based on the KeyMorph framework, trained on over 100,000 brain MR images at full resolution (256x256x256).
-The model is robust to normal and diseased brains, a variety of MRI modalities, and skullstripped and non-skullstripped images.
+BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqrwang/keymorph), a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints. 
 
 ## Updates
 - [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Detailed instructions under "BrainMorph" (paper to come!).
 - [Apr 2024] Released foundational model of KeyMorph for brain MRIs, called BrainMorph, which is trained on over 100K images at full resolution (256^3). Instructions under "BrainMorph".
-- [Dec 2023] [Journal paper](https://arxiv.org/abs/2304.09941) extension of MIDL paper published in Medical Image Analysis. Instructions under "IXI-trained, half-resolution models".
-- [Feb 2022] [Conference paper](https://openreview.net/forum?id=OrNzjERFybh) published in MIDL 2021.
 
 ## Installation
 
-We recommend using pip to install keymorph:
+We recommend using pip to install brainmorph:
 ```bash
-pip install keymorph
+pip install brainmorph
 ```
 
-To run scripts and/or contribute to keymorph, you should install from source:
+To run scripts and/or contribute to brainmorph, you should install from source:
 ```bash
-git clone https://github.com/alanqrwang/keymorph.git
+git clone https://github.com/alanqrwang/brainmorph.git
 cd keymorph
 pip install -e .
 ```
 
 ### Requirements
-The keymorph package depends on the following requirements:
+The brainmorph package depends on the following requirements:
 
 - numpy>=1.19.1
 - ogb>=1.2.6
@@ -45,7 +45,6 @@ Running `pip install keymorph` or `pip install -e .` will automatically check fo
 
 ## Downloading Trained Weights
 You can find all full-resolution, BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i).
-Half-resolution trained weights are under [Releases](https://github.com/alanqrwang/keymorph/releases).
 Download your preferred model(s) and put them in the folder specified by `--weights_dir` in the commands below.
 
 ## Registering brain volumes 
@@ -110,29 +109,6 @@ python scripts/register.py \
     --moving_seg ./example_data/ \
     --fixed_seg ./example_data/ \
     --list_of_aligns rigid affine tps_1 \
-    --list_of_metrics mse harddice \
-    --save_eval_to_disk \
-    --visualize
-```
-
-
-
-### IXI-trained, half-resolution models
-All other model weights are trained on half-resolution (128x128x128) on the (smaller) IXI dataset. 
-The script will automatically min-max normalize the images.
-To register two volumes with our best-performing model:
-
-```bash
-python scripts/register.py \
-    --half_resolution \
-    --num_keypoints 512 \
-    --backbone conv \
-    --moving ./example_data_half/img_m/IXI_001_128x128x128.nii.gz \
-    --fixed ./example_data_half/img_m/IXI_002_128x128x128.nii.gz \
-    --load_path ./weights/numkey512_tps0_dice.4760.h5 \
-    --moving_seg ./example_data_half/seg_m/IXI_001_128x128x128.nii.gz \
-    --fixed_seg ./example_data_half/seg_m/IXI_002_128x128x128.nii.gz \
-    --list_of_aligns affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
     --visualize

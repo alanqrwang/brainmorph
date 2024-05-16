@@ -5,9 +5,9 @@ import torchio as tio
 import time
 import torch.nn.functional as F
 
-from keymorph import utils
-from keymorph.augmentation import random_affine_augment
-from keymorph.viz_tools import imshow_registration_2d, imshow_registration_3d
+from brainmorph import utils
+from brainmorph.augmentation import random_affine_augment
+from brainmorph.viz_tools import imshow_registration_2d, imshow_registration_3d
 
 
 def run_pretrain(loader, random_points, keymorph_model, optimizer, args):

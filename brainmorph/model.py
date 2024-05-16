@@ -9,14 +9,18 @@ import time
 import os
 from torch.utils import checkpoint
 
-from keymorph.keypoint_aligners import RigidKeypointAligner, AffineKeypointAligner, TPS
-from keymorph.layers import (
+from brainmorph.keypoint_aligners import (
+    RigidKeypointAligner,
+    AffineKeypointAligner,
+    TPS,
+)
+from brainmorph.layers import (
     LinearRegressor2d,
     LinearRegressor3d,
     CenterOfMass2d,
     CenterOfMass3d,
 )
-from keymorph.utils import str_or_float, rescale_intensity
+from brainmorph.utils import str_or_float, rescale_intensity
 
 
 class KeyMorph(nn.Module):

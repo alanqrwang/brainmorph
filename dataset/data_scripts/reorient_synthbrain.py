@@ -2,7 +2,7 @@ import os
 import subprocess
 from pathlib import Path
 import torchio as tio
-from keymorph import utils
+from brainmorph import utils
 import numpy as np
 from pprint import pprint
 from argparse import ArgumentParser
@@ -24,8 +24,10 @@ def _reorient(src_dir, tgt_dir):
             name = basename.split(".")[0]
             s = os.path.join(src_dir, basename)
             t = os.path.join(tgt_dir, name)
-            t_with_ext = os.path.join(tgt_dir, f'{name}.nii.gz')
-            if not os.path.exists(t_with_ext): # Only perform reorient if the file doesn't exist
+            t_with_ext = os.path.join(tgt_dir, f"{name}.nii.gz")
+            if not os.path.exists(
+                t_with_ext
+            ):  # Only perform reorient if the file doesn't exist
                 reorient_command = f"fslreorient2std {s} {t}"
                 shell_command(reorient_command)
             else:

@@ -5,11 +5,11 @@ import torchio as tio
 import time
 from torch.profiler import profile, record_function, ProfilerActivity
 
-import keymorph.utils as utils
-from keymorph.utils import align_img
-from keymorph.viz_tools import imshow_registration_2d, imshow_registration_3d
-from keymorph.augmentation import random_affine_augment
-import keymorph.loss_ops as loss_ops
+import brainmorph.utils as utils
+from brainmorph.utils import align_img
+from brainmorph.viz_tools import imshow_registration_2d, imshow_registration_3d
+from brainmorph.augmentation import random_affine_augment
+import brainmorph.loss_ops as loss_ops
 
 
 def run_train(train_loader, registration_model, optimizer, train_params, args):

@@ -4,7 +4,7 @@ import torch
 import time
 import os
 
-import keymorph.utils as utils
+import brainmorph.utils as utils
 
 
 class ITKElastix:

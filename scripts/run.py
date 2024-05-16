@@ -9,12 +9,12 @@ import wandb
 import torchio as tio
 import json
 from copy import deepcopy
-from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
+from brainmorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 
-from keymorph.net import ConvNet
-from keymorph.model import KeyMorph
-from keymorph import utils
-from keymorph.utils import (
+from brainmorph.net import ConvNet
+from brainmorph.model import KeyMorph
+from brainmorph import utils
+from brainmorph.utils import (
     ParseKwargs,
     initialize_wandb,
     save_dict_as_json,

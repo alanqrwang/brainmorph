@@ -8,7 +8,7 @@ import time
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 
-import keymorph.utils as utils
+import brainmorph.utils as utils
 import voxelmorph as vxm
 import tensorflow as tf
 
