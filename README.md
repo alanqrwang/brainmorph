@@ -13,13 +13,6 @@ BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqr
 - [Apr 2024] Released foundational model of KeyMorph for brain MRIs, called BrainMorph, which is trained on over 100K images at full resolution (256^3). Instructions under "BrainMorph".
 
 ## Installation
-
-We recommend using pip to install brainmorph:
-```bash
-pip install brainmorph
-```
-
-To run scripts and/or contribute to brainmorph, you should install from source:
 ```bash
 git clone https://github.com/alanqrwang/brainmorph.git
 cd keymorph
