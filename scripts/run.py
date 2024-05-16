@@ -682,6 +682,9 @@ def main():
                         list_of_eval_long_aligns,
                         args,
                         save_dir_prefix=experiment_name,
+                        duplicate_files=(
+                            True if args.registration_model == "itkelastix" else False
+                        ),
                     )
                     if not args.debug_mode:
                         save_dict_as_json(long_metrics, json_path)
@@ -705,6 +708,9 @@ def main():
                         list_of_eval_group_sizes,
                         args,
                         save_dir_prefix=experiment_name,
+                        duplicate_files=(
+                            True if args.registration_model == "itkelastix" else False
+                        ),
                     )
                     if not args.debug_mode:
                         save_dict_as_json(group_metrics, json_path)

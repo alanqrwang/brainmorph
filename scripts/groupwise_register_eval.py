@@ -23,6 +23,7 @@ def run_long_eval(
     list_of_eval_kp_aligns,
     args,
     save_dir_prefix="long_eval",
+    duplicate_files=False,
 ):
     """Longitudinal evaluation."""
 
@@ -101,6 +102,7 @@ def run_long_eval(
                     list_of_eval_kp_aligns,
                     aug,
                     args,
+                    duplicate_files=duplicate_files,
                 )
 
                 for align_type_str, res_dict in registration_results.items():
@@ -154,6 +156,7 @@ def run_group_eval(
     list_of_group_sizes,
     args,
     save_dir_prefix="group_eval",
+    duplicate_files=False,
 ):
     """Group evaluation. Since group size can be large, we cannot load
     all images at once. Instead, we load images one by one, augment
@@ -238,6 +241,7 @@ def run_group_eval(
                     list_of_eval_kp_aligns,
                     aug,
                     args,
+                    duplicate_files=duplicate_files,
                 )
 
                 for align_type_str, res_dict in registration_results.items():
@@ -288,6 +292,7 @@ def _run_group_eval_dir(
     list_of_eval_kp_aligns,
     aug,
     args,
+    duplicate_files=False,
 ):
     """Takes a directory of images and segmentations, and runs groupwise registration on them.
     In group_dir, assumes img_m/ and seg_m/. Creates img_a/, seg_a/, and registration_results/.
@@ -351,7 +356,7 @@ def _run_group_eval_dir(
     # If number of files in group directory is less than 4, duplicate the first image to make 4.
     # This is because some groupwise registration packages require
     # at least 4 images.
-    if not args.debug_mode:
+    if not args.debug_mode and duplicate_files:
         _duplicate_files_to_N(groupimg_m_dir, N=4)
         if args.seg_available:
             _duplicate_files_to_N(groupseg_m_dir, N=4)
@@ -456,6 +461,10 @@ def _run_group_eval_dir(
         #             ],
         #         )
 
+        from pprint import pprint
+
+        pprint(groupimg_a_paths)
+        pprint(groupseg_a_paths)
         metrics = {}
         img_metric_names, grid_metric_names = [], []
         for m in list_of_eval_metrics:
