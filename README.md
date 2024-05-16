@@ -34,15 +34,14 @@ The brainmorph package depends on the following requirements:
 - scipy>=1.5.4
 - torchio>=0.19.6
 
-Running `pip install keymorph` or `pip install -e .` will automatically check for and install all of these requirements.
+Running `pip install -e .` will automatically check for and install all of these requirements.
 
 ## Downloading Trained Weights
-You can find all full-resolution, BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i).
+You can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i).
 Download your preferred model(s) and put them in the folder specified by `--weights_dir` in the commands below.
 
 ## Registering brain volumes 
-### BrainMorph
-BrainMorph is trained on over 100,000 brain MR images at full resolution (256x256x256). 
+### Pairwise registration
 The script will automatically min-max normalize the images and resample to 1mm isotropic resolution.
 
 `--num_keypoints` and `num_levels_for_unet` will determine which model will be used to perform the registration.
@@ -108,7 +107,7 @@ python scripts/register.py \
 ```
 
 ## TLDR in code
-The crux of the code is in the `forward()` function in `keymorph/model.py`, which performs one forward pass through the entire KeyMorph pipeline.
+The crux of the code is in the `forward()` function in `brainmorph/model.py`, which performs one forward pass through the entire BrainMorph pipeline.
 
 Here's a pseudo-code version of the function:
 ```python
@@ -148,11 +147,12 @@ def forward(img_f, img_m, seg_f, seg_m, network, optimizer, kp_aligner):
 The `network` variable is a CNN with center-of-mass layer which extracts keypoints from the input images.
 The `kp_aligner` variable is a keypoint alignment module. It has a function `grid_from_points()` which returns a flow-field grid encoding the transformation to perform on the moving image. The transformation can either be rigid, affine, or nonlinear (TPS).
 
-## Training KeyMorph
-Use `scripts/run.py` with `--run_mode train` to train KeyMorph.
+## Training BrainMorph
+Use `scripts/run.py` with `--run_mode train` to train BrainMorph.
 <!-- Some example bash commands are provided in `bash_scripts/`. -->
-You will likely need to customize some of the dataloading code in `./dataset` for your own datasets and data formats.
-See `./dataset/gigamed.py` for an example of how to load the data used for training BrainMorph.
+<!-- See `./dataset/gigamed.py` for an example of how to load the data used for training BrainMorph. -->
+
+If you want to train with your own data, we recommend starting with the more minimal [keymorph repository](https://github.com/alanqrwang/keymorph).
 
 <!-- I'm in the process of updating the code to make it more user-friendly, and will update this repository soon. -->
 <!-- In the meantime, feel free to open an issue if you have any training questions. -->
@@ -272,14 +272,9 @@ For evaluation, we use [SynthSeg](https://github.com/BBillot/SynthSeg) to automa
 ## Issues
 This repository is being actively maintained. Feel free to open an issue for any problems or questions.
 
-## Legacy code
-For a legacy version of the code, see our [legacy branch](https://github.com/alanqrwang/keymorph/tree/legacy).
-
 ## References
-If this code is useful to you, please consider citing our papers.
-The first conference paper contains the unsupervised, affine version of KeyMorph.
-The second, follow-up journal paper contains the unsupervised/supervised, affine/TPS versions of KeyMorph.
+If this code is useful to you, please consider citing our papers (TODO).
 
-Evan M. Yu, et al. "[KeyMorph: Robust Multi-modal Affine Registration via Unsupervised Keypoint Detection.](https://openreview.net/forum?id=OrNzjERFybh)" (MIDL 2021).
+<!-- Evan M. Yu, et al. "[KeyMorph: Robust Multi-modal Affine Registration via Unsupervised Keypoint Detection.](https://openreview.net/forum?id=OrNzjERFybh)" (MIDL 2021).
 
-Alan Q. Wang, et al. "[A Robust and Interpretable Deep Learning Framework for Multi-modal Registration via Keypoints.](https://arxiv.org/abs/2304.09941)" (Medical Image Analysis 2023).
+Alan Q. Wang, et al. "[A Robust and Interpretable Deep Learning Framework for Multi-modal Registration via Keypoints.](https://arxiv.org/abs/2304.09941)" (Medical Image Analysis 2023). -->
