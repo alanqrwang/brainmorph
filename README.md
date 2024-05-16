@@ -15,7 +15,7 @@ BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqr
 ## Installation
 ```bash
 git clone https://github.com/alanqrwang/brainmorph.git
-cd keymorph
+cd brainmorph
 pip install -e .
 ```
 
