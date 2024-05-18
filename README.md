@@ -36,8 +36,8 @@ The brainmorph package depends on the following requirements:
 Running `pip install -e .` will automatically check for and install all of these requirements.
 
 ## Downloading Trained Weights
-You can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i).
-Download your preferred model(s) and put them in the folder specified by `--weights_dir` in the commands below.
+The ``--download`` flag in the provided script will automatically download the corresponding model and place is in the folder specified by `--weights_dir` (see below commands).
+Otherwise, you can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i) and manually place them in the folder specified by `--weights_dir`.
 
 ## Registering brain volumes 
 To get started, check out the `tutorial.ipynb` notebook.
@@ -62,7 +62,8 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
-    --visualize
+    --visualize \
+    --download
 ```
 
 Description of other important flags:
@@ -87,7 +88,8 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
-    --visualize
+    --visualize \
+    --download
 ```
 
 ### Groupwise registration
@@ -105,7 +107,8 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
-    --visualize
+    --visualize \
+    --download
 ```
 
 ## TLDR in code

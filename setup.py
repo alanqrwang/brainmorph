@@ -30,6 +30,7 @@ setuptools.setup(
         "scikit-learn>=0.20.0",
         "scipy>=1.5.4",
         "torchio>=0.19.6",
+        "gdown-5.2.0",
     ],
     license="MIT",
     packages=setuptools.find_packages(

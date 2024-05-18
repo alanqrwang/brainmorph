@@ -1,4 +1,5 @@
 import os
+import time
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
@@ -13,6 +14,21 @@ from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 from keymorph.net import ConvNet
 from scripts.pairwise_register_eval import run_eval
 from scripts.groupwise_register_eval import run_group_eval
+
+URL_DICT = {
+    "foundation-numkey128-numlevels4.pth.tar": "https://drive.google.com/uc?id=1LaBdf11LXhNYAeSr2DBDwsSrQ2UwZ0DJ",
+    "foundation-numkey128-numlevels5.pth.tar": "https://drive.google.com/uc?id=1J9A0F5O__xKKh77832nkUDI3YElkN74Q",
+    "foundation-numkey128-numlevels6.pth.tar": "https://drive.google.com/uc?id=1kppCKSR3nAoKuNHwZhV4p0KceyAJVubO",
+    "foundation-numkey128-numlevels7.pth.tar": "https://drive.google.com/uc?id=12VFw0XQDnVpnMDQQrB0vUcHPbqeckyYe",
+    "foundation-numkey256-numlevels4.pth.tar": "https://drive.google.com/uc?id=1iHBvSXH67Rlvng_7VHURjxmiWLhXsGvG",
+    "foundation-numkey256-numlevels5.pth.tar": "https://drive.google.com/uc?id=1q-RqDCyLbiZF3WCJGtvRClhdbhpdcN4u",
+    "foundation-numkey256-numlevels6.pth.tar": "https://drive.google.com/uc?id=1bUeeTucNw-wZGJ4iXz8uxDJUNx-_XpxM",
+    "foundation-numkey256-numlevels7.pth.tar": "https://drive.google.com/uc?id=1-aI6dY67l_FP1K_dtBGMK2oJsA51ZxFL",
+    "foundation-numkey512-numlevels4.pth.tar": "https://drive.google.com/uc?id=14ig3UzF2awqTwkIA49BXBBz3lQQS4JCn",
+    "foundation-numkey512-numlevels5.pth.tar": "https://drive.google.com/uc?id=1_so52Z99EE0eMMXvqwIWK23GbzxDj-40",
+    "foundation-numkey512-numlevels6.pth.tar": "https://drive.google.com/uc?id=16015bMeH7aG9jMknmtwpp2zxrreNq6_X",
+    "foundation-numkey512-numlevels7.pth.tar": "https://drive.google.com/uc?id=1o_XG1FL4O3rsoCZvH2gzbzsCzd79uKnD",
+}
 
 
 def parse_args():
@@ -146,6 +162,10 @@ def parse_args():
         "--num_resolutions_for_itkelastix", type=int, default=4, help="Num resolutions"
     )
 
+    parser.add_argument(
+        "--download", action="store_true", help="Download the model if not found"
+    )
+
     args = parser.parse_args()
     return args
 
@@ -225,6 +245,39 @@ def get_group_loader(args):
 def get_foundation_weights_path(weights_dir, num_keypoints, num_levels):
     template_name = "foundation-numkey{}-numlevels{}.pth.tar"
     return os.path.join(weights_dir, template_name.format(num_keypoints, num_levels))
+
+
+def download_model(model_path, download_flag):
+    model_basename = os.path.basename(model_path)
+    model_dir = os.path.dirname(model_path)
+    download_url = URL_DICT[model_basename]
+
+    # Check that the download_flag is set to true.
+    if not os.path.exists(model_path) and not download_flag:
+        raise FileNotFoundError(
+            f"{model_path} could not be found. Run again with --download. "
+        )
+
+    from scripts.download_utils import download_file_from_google_drive_gdown
+
+    # print(f"Downloading model to {model_path}...")
+    # print(
+    # f"You can also download the model manually at https://cornell.app.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i."
+    # )
+
+    try:
+        start_time = time.time()
+        download_file_from_google_drive_gdown(
+            file_id=download_url,
+            root=model_dir,
+            filename=model_basename,
+        )
+        download_time_in_minutes = (time.time() - start_time) / 60
+        print(
+            f"\nIt took {round(download_time_in_minutes, 2)} minutes to download the model.\n"
+        )
+    except Exception as e:
+        print(f"Error with downloading {download_url}: ", e)
 
 
 def get_model(args):
@@ -374,6 +427,7 @@ if __name__ == "__main__":
         args.load_path = get_foundation_weights_path(
             args.weights_dir, args.num_keypoints, args.num_levels_for_unet
         )
+        download_model(args.load_path, download_flag=args.download)
     if args.load_path is not None:
         print(f"Loading checkpoint from {args.load_path}")
         ckpt_state, registration_model = utils.load_checkpoint(
@@ -392,7 +446,7 @@ if __name__ == "__main__":
             args.list_of_aligns,
             list_of_group_sizes,
             args,
-            save_dir_prefix="group_eval",
+            save_dir_prefix=f"groupeval_numkey{args.num_keypoints}_numlevels{args.num_levels_for_unet}",
         )
     else:
         run_eval(
@@ -403,5 +457,5 @@ if __name__ == "__main__":
             list_of_eval_augs,
             args.list_of_aligns,
             args,
-            save_dir_prefix="eval",
+            save_dir_prefix=f"eval_numkey{args.num_keypoints}_numlevels{args.num_levels_for_unet}",
         )
