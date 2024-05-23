@@ -80,7 +80,7 @@ Note that the script expects corresponding image and segmentation pairs to have 
 ```bash
 python scripts/register.py \
     --num_keypoints 256 \
-    --num_levels_for_unet 4 \
+    --variant S \
     --weights_dir ./weights/ \
     --moving ./example_data/img_m/ \
     --fixed ./example_data/img_m/ \
@@ -99,7 +99,7 @@ To register a group of volumes, put the volumes in `./example_data/img_m`. If se
 python scripts/register.py \
     --groupwise \
     --num_keypoints 256 \
-    --num_levels_for_unet 4 \
+    --variant S \
     --weights_dir ./weights/ \
     --moving ./example_data/ \
     --fixed ./example_data/ \
