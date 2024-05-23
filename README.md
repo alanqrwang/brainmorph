@@ -8,6 +8,8 @@ It supports unimodal/multimodal pairwise and groupwise registration using rigid,
 
 BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqrwang/keymorph), a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints. 
 
+Check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing) to get started!
+
 ## Updates
 - [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Usage instructions under "Registering brain volumes" (paper to come!).
 
@@ -40,7 +42,7 @@ The ``--download`` flag in the provided script will automatically download the c
 Otherwise, you can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i) and manually place them in the folder specified by `--weights_dir`.
 
 ## Registering brain volumes 
-To get started, check out the `tutorial.ipynb` notebook.
+To get started, check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing)!
 
 ### Pairwise registration
 The script will automatically min-max normalize the images and resample to 1mm isotropic resolution.
