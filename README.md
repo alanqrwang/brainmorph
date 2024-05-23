@@ -45,15 +45,15 @@ To get started, check out the `tutorial.ipynb` notebook.
 ### Pairwise registration
 The script will automatically min-max normalize the images and resample to 1mm isotropic resolution.
 
-`--num_keypoints` and `num_levels_for_unet` will determine which model will be used to perform the registration.
-Make sure the corresponding weights are present in `--weights_dir`.
-`--num_keypoints` can be set to `128, 256, 512` and `--num_levels_for_unet` can be set to `4, 5, 6, 7`, respectively (corresponding to 'S', 'M', 'L', 'H' in the paper).
+`--num_keypoints` and `--variant` will determine which model will be used to perform the registration.
+<!-- Make sure the corresponding weights are present in `--weights_dir`. -->
+`--num_keypoints` can be set to `128, 256, 512` and `--variant` can be set to `S, M, L, H` (corresponding to model size).
 
 To register a single pair of volumes:
 ```
 python scripts/register.py \
     --num_keypoints 256 \
-    --num_levels_for_unet 4 \
+    --variant S \
     --weights_dir ./weights/ \
     --moving ./example_data/img_m/IXI_000001_0000.nii.gz \
     --fixed ./example_data/img_m/IXI_000002_0000.nii.gz \
@@ -73,6 +73,7 @@ Description of other important flags:
 + `--list_of_metrics` specifies the metrics to report. Options are `mse`, `harddice`, `softdice`, `hausd`, `jdstd`, `jdlessthan0`. To compute Dice scores and surface distances, `--moving_seg` and `--fixed_seg` must be provided.
 + `--save_eval_to_disk` saves all outputs to disk. The default location is `./register_output/`.
 + `--visualize` plots a matplotlib figure of moving, fixed, and registered images overlaid with corresponding points.
++ `--download` downloads the corresponding model weights automatically if not present in `--weights_dir`.
 
 You can also replace filenames with directories to register all pairs of images in the directories.
 Note that the script expects corresponding image and segmentation pairs to have the same filename.

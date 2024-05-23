@@ -82,10 +82,11 @@ def parse_args():
         help="Number of truncated layers for truncated unet",
     )
     parser.add_argument(
-        "--num_levels_for_unet",
-        type=int,
-        default=4,
-        help="Number of levels for unet",
+        "--variant",
+        type=str,
+        default="S",
+        choices=["S", "M", "L", "H"],
+        help="BrainMorph variant",
     )
     parser.add_argument(
         "--norm_type",
@@ -393,6 +394,16 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
+    # Map model variants to number of levels of UNet
+    if args.variant == "S":
+        args.num_levels_for_unet = 4
+    elif args.variant == "M":
+        args.num_levels_for_unet = 5
+    elif args.variant == "L":
+        args.num_levels_for_unet = 6
+    elif args.variant == "H":
+        args.num_levels_for_unet = 7
+
     # Pre-processing transforms
     transform = tio.Compose(
         [
@@ -446,7 +457,7 @@ if __name__ == "__main__":
             args.list_of_aligns,
             list_of_group_sizes,
             args,
-            save_dir_prefix=f"groupeval_numkey{args.num_keypoints}_numlevels{args.num_levels_for_unet}",
+            save_dir_prefix=f"groupeval_numkey{args.num_keypoints}_variant{args.variant}",
         )
     else:
         run_eval(
@@ -457,5 +468,5 @@ if __name__ == "__main__":
             list_of_eval_augs,
             args.list_of_aligns,
             args,
-            save_dir_prefix=f"eval_numkey{args.num_keypoints}_numlevels{args.num_levels_for_unet}",
+            save_dir_prefix=f"eval_numkey{args.num_keypoints}_variant{args.variant}",
         )
