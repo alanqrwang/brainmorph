@@ -13,6 +13,7 @@ BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqr
 Check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing) to get started!
 
 ## Updates
+- [May 2024] The preprint for BrainMorph is available on [arXiv](https://arxiv.org/abs/2405.14019)!
 - [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Usage instructions under "Registering brain volumes" (paper to come!).
 
 ## Installation
@@ -281,8 +282,6 @@ For evaluation, we use [SynthSeg](https://github.com/BBillot/SynthSeg) to automa
 This repository is being actively maintained. Feel free to open an issue for any problems or questions.
 
 ## References
-If this code is useful to you, please consider citing our papers (TODO).
+If this code is useful to you, please consider citing the BrainMorph paper.
 
-<!-- Evan M. Yu, et al. "[KeyMorph: Robust Multi-modal Affine Registration via Unsupervised Keypoint Detection.](https://openreview.net/forum?id=OrNzjERFybh)" (MIDL 2021).
-
-Alan Q. Wang, et al. "[A Robust and Interpretable Deep Learning Framework for Multi-modal Registration via Keypoints.](https://arxiv.org/abs/2304.09941)" (Medical Image Analysis 2023). -->
+Alan Q. Wang, et al. "[BrainMorph: A Foundational Keypoint Model for Robust and Flexible Brain MRI Registration.](https://arxiv.org/abs/2405.14019)" 
