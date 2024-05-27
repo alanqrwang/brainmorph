@@ -6,6 +6,8 @@ It is a deep learning-based model trained on over 100,000 brain MR images at ful
 The model is robust to normal and diseased brains, a variety of MRI modalities, and skullstripped and non-skullstripped images.
 It supports unimodal/multimodal pairwise and groupwise registration using rigid, affine, or nonlinear transformations.
 
+![BrainMorph visualization](imshow_points_ss_and_nss.png)
+
 BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqrwang/keymorph), a deep learning-based image registration framework that relies on automatically extracting corresponding keypoints. 
 
 Check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing) to get started!
