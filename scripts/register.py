@@ -152,19 +152,21 @@ def parse_args():
     parser.add_argument(
         "--groupwise", action="store_true", help="Perform groupwise registration"
     )
-
     parser.add_argument(
         "--use_checkpoint",
         action="store_true",
         help="Use torch.utils.checkpoint",
     )
-
     parser.add_argument(
         "--num_resolutions_for_itkelastix", type=int, default=4, help="Num resolutions"
     )
-
     parser.add_argument(
         "--download", action="store_true", help="Download the model if not found"
+    )
+    parser.add_argument(
+        "--skip_if_completed",
+        action="store_true",
+        help="If set, skips the registration if the output exists",
     )
 
     args = parser.parse_args()
@@ -459,7 +461,7 @@ if __name__ == "__main__":
             args.list_of_aligns,
             list_of_group_sizes,
             args,
-            save_dir_prefix=f"groupeval_numkey{args.num_keypoints}_variant{args.variant}",
+            save_dir_prefix="",
         )
     else:
         run_eval(
@@ -470,6 +472,5 @@ if __name__ == "__main__":
             list_of_eval_augs,
             args.list_of_aligns,
             args,
-            # save_dir_prefix=f"eval_numkey{args.num_keypoints}_variant{args.variant}",
             save_dir_prefix="",
         )

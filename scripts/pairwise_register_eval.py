@@ -74,7 +74,10 @@ def run_eval(
                         / f"metrics-{aug}-{align_type_str}.json"
                         for align_type_str in list_of_eval_aligns
                     }
-                    if all([os.path.exists(p) for p in all_metrics_paths.values()]):
+                    if (
+                        all([os.path.exists(p) for p in all_metrics_paths.values()])
+                        and args.skip_if_completed
+                    ):
                         print(
                             f"Found metrics for all alignments, skipping running registration..."
                         )
