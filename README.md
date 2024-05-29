@@ -73,7 +73,7 @@ python scripts/register.py \
 
 Description of other important flags:
 + `--moving` and `--fixed` are paths to moving and fixed images.
-+ `--moving_seg` and `--fixed_seg` are optional, but are required if you want the script to report Dice scores. 
++ `--moving_seg` and `--fixed_seg` are paths to moving and fixed segmentation maps. These are optional, but are required if you want the script to report Dice scores or surface distances. 
 + `--list_of_aligns` specifies the types of alignment to perform. Options are `rigid`, `affine` and `tps_<lambda>` (TPS with hyperparameter value equal to lambda). lambda=0 corresponds to exact keypoint alignment. lambda=10 is very similar to affine.
 + `--list_of_metrics` specifies the metrics to report. Options are `mse`, `harddice`, `softdice`, `hausd`, `jdstd`, `jdlessthan0`. To compute Dice scores and surface distances, `--moving_seg` and `--fixed_seg` must be provided.
 + `--save_eval_to_disk` saves all outputs to disk. The default location is `./register_output/`.
