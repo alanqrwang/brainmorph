@@ -67,6 +67,7 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
+    --save_dir ./register_output/ \
     --visualize \
     --download
 ```
@@ -76,7 +77,8 @@ Description of other important flags:
 + `--moving_seg` and `--fixed_seg` are paths to moving and fixed segmentation maps. These are optional, but are required if you want the script to report Dice scores or surface distances. 
 + `--list_of_aligns` specifies the types of alignment to perform. Options are `rigid`, `affine` and `tps_<lambda>` (TPS with hyperparameter value equal to lambda). lambda=0 corresponds to exact keypoint alignment. lambda=10 is very similar to affine.
 + `--list_of_metrics` specifies the metrics to report. Options are `mse`, `harddice`, `softdice`, `hausd`, `jdstd`, `jdlessthan0`. To compute Dice scores and surface distances, `--moving_seg` and `--fixed_seg` must be provided.
-+ `--save_eval_to_disk` saves all outputs to disk. The default location is `./register_output/`.
++ `--save_eval_to_disk` saves all outputs to disk. 
++ `--save_dir` specifies the folder where outputs will be saved. The default location is `./register_output/`.
 + `--visualize` plots a matplotlib figure of moving, fixed, and registered images overlaid with corresponding points.
 + `--download` downloads the corresponding model weights automatically if not present in `--weights_dir`.
 
@@ -94,6 +96,7 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
+    --save_dir ./register_output/ \
     --visualize \
     --download
 ```
@@ -113,6 +116,7 @@ python scripts/register.py \
     --list_of_aligns rigid affine tps_1 \
     --list_of_metrics mse harddice \
     --save_eval_to_disk \
+    --save_dir ./register_output/ \
     --visualize \
     --download
 ```
