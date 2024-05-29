@@ -407,6 +407,8 @@ if __name__ == "__main__":
         args.num_levels_for_unet = 6
     elif args.variant == "H":
         args.num_levels_for_unet = 7
+    else:
+        raise ValueError("Invalid variant")
 
     # Pre-processing transforms
     transform = tio.Compose(

@@ -148,6 +148,10 @@ def run_eval(
                                     "jdstd" in res_dict and "jdlessthan0" in res_dict
                                 )  # If no grid, then must have jdstd and jdlessthan0
                                 grid = None
+                            if "matrix" in res_dict:
+                                transform_matrix = res_dict["matrix"]
+                            else:
+                                transform_matrix = None
                             if args.seg_available:
                                 if "seg_m" in res_dict:
                                     seg_m = res_dict["seg_m"]
@@ -365,7 +369,7 @@ def run_eval(
                                 print("Saving:", metrics_path)
                                 save_dict_as_json(metrics, metrics_path)
 
-                                # Save images and grid
+                                # Save images and grid/matrix
                                 img_f_path = save_dir / f"img_f_{i}-{mod1_str}.npy"
                                 img_m_path = (
                                     save_dir / f"img_m_{j}-{mod2_str}-{aug}.npy"
@@ -377,6 +381,10 @@ def run_eval(
                                 grid_path = (
                                     save_dir
                                     / f"grid_{i}-{mod1_str}_{j}-{mod2_str}-{aug}-{align_type_str}.npy"
+                                )
+                                matrix_path = (
+                                    save_dir
+                                    / f"matrix_{i}-{mod1_str}_{j}-{mod2_str}-{aug}-{align_type_str}.npy"
                                 )
                                 if not os.path.exists(img_f_path):
                                     print("Saving:", img_f_path)
@@ -391,6 +399,14 @@ def run_eval(
                                     np.save(grid_path, grid[0].cpu().detach().numpy())
                                 else:
                                     print("Grid is None, not saving!")
+                                if transform_matrix is not None:
+                                    print("Saving:", matrix_path)
+                                    np.save(
+                                        matrix_path,
+                                        transform_matrix[0].cpu().detach().numpy(),
+                                    )
+                                else:
+                                    print("Matrix is None, not saving!")
 
                                 # Save segmentations
                                 if args.seg_available:
