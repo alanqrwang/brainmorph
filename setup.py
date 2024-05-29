@@ -31,6 +31,9 @@ setuptools.setup(
         "scipy>=1.5.4",
         "torchio>=0.19.6",
         "gdown>=5.2.0",
+        "scikit-image>=0.22.0",
+        "matplotlib>=3.8.3",
+        "h5py>=3.10.0",
     ],
     license="MIT",
     packages=setuptools.find_packages(
