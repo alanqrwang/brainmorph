@@ -19,15 +19,15 @@ URL_DICT = {
     "foundation-numkey128-numlevels4.pth.tar": "https://drive.google.com/uc?id=1LaBdf11LXhNYAeSr2DBDwsSrQ2UwZ0DJ",
     "foundation-numkey128-numlevels5.pth.tar": "https://drive.google.com/uc?id=1J9A0F5O__xKKh77832nkUDI3YElkN74Q",
     "foundation-numkey128-numlevels6.pth.tar": "https://drive.google.com/uc?id=1kppCKSR3nAoKuNHwZhV4p0KceyAJVubO",
-    "foundation-numkey128-numlevels7.pth.tar": "https://drive.google.com/uc?id=12VFw0XQDnVpnMDQQrB0vUcHPbqeckyYe",
+    # "foundation-numkey128-numlevels7.pth.tar": "https://drive.google.com/uc?id=12VFw0XQDnVpnMDQQrB0vUcHPbqeckyYe",
     "foundation-numkey256-numlevels4.pth.tar": "https://drive.google.com/uc?id=1iHBvSXH67Rlvng_7VHURjxmiWLhXsGvG",
     "foundation-numkey256-numlevels5.pth.tar": "https://drive.google.com/uc?id=1q-RqDCyLbiZF3WCJGtvRClhdbhpdcN4u",
     "foundation-numkey256-numlevels6.pth.tar": "https://drive.google.com/uc?id=1bUeeTucNw-wZGJ4iXz8uxDJUNx-_XpxM",
-    "foundation-numkey256-numlevels7.pth.tar": "https://drive.google.com/uc?id=1-aI6dY67l_FP1K_dtBGMK2oJsA51ZxFL",
+    # "foundation-numkey256-numlevels7.pth.tar": "https://drive.google.com/uc?id=1-aI6dY67l_FP1K_dtBGMK2oJsA51ZxFL",
     "foundation-numkey512-numlevels4.pth.tar": "https://drive.google.com/uc?id=14ig3UzF2awqTwkIA49BXBBz3lQQS4JCn",
     "foundation-numkey512-numlevels5.pth.tar": "https://drive.google.com/uc?id=1_so52Z99EE0eMMXvqwIWK23GbzxDj-40",
     "foundation-numkey512-numlevels6.pth.tar": "https://drive.google.com/uc?id=16015bMeH7aG9jMknmtwpp2zxrreNq6_X",
-    "foundation-numkey512-numlevels7.pth.tar": "https://drive.google.com/uc?id=1o_XG1FL4O3rsoCZvH2gzbzsCzd79uKnD",
+    # "foundation-numkey512-numlevels7.pth.tar": "https://drive.google.com/uc?id=1o_XG1FL4O3rsoCZvH2gzbzsCzd79uKnD",
 }
 
 
@@ -85,7 +85,7 @@ def parse_args():
         "--variant",
         type=str,
         default="S",
-        choices=["S", "M", "L", "H"],
+        choices=["S", "M", "L"],
         help="BrainMorph variant",
     )
     parser.add_argument(
@@ -202,6 +202,8 @@ def get_loaders(args):
             else:
                 fixed_seg_path = None
             fixed.append(build_tio_subject(fixed_path, fixed_seg_path))
+    else:
+        raise ValueError("Invalid input paths")
 
     # Build dataset
     fixed_dataset = tio.SubjectsDataset(fixed, transform=transform)
@@ -468,5 +470,6 @@ if __name__ == "__main__":
             list_of_eval_augs,
             args.list_of_aligns,
             args,
-            save_dir_prefix=f"eval_numkey{args.num_keypoints}_variant{args.variant}",
+            # save_dir_prefix=f"eval_numkey{args.num_keypoints}_variant{args.variant}",
+            save_dir_prefix="",
         )

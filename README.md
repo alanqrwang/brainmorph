@@ -52,7 +52,7 @@ The script will automatically min-max normalize the images and resample to 1mm i
 
 `--num_keypoints` and `--variant` will determine which model will be used to perform the registration.
 <!-- Make sure the corresponding weights are present in `--weights_dir`. -->
-`--num_keypoints` can be set to `128, 256, 512` and `--variant` can be set to `S, M, L, H` (corresponding to model size).
+`--num_keypoints` can be set to `128, 256, 512` and `--variant` can be set to `S, M, L` (corresponding to model size).
 
 To register a single pair of volumes:
 ```
