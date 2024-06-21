@@ -12,8 +12,8 @@ from keymorph.model import KeyMorph
 from keymorph import utils
 from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 from keymorph.net import ConvNet
-from scripts.pairwise_register_eval import run_eval
-from scripts.groupwise_register_eval import run_group_eval
+from brainmorph.scripts.pairwise_register_eval import run_eval
+from brainmorph.scripts.groupwise_register_eval import run_group_eval
 
 URL_DICT = {
     "foundation-numkey128-numlevels4.pth.tar": "https://drive.google.com/uc?id=1LaBdf11LXhNYAeSr2DBDwsSrQ2UwZ0DJ",
@@ -116,6 +116,14 @@ def parse_args():
         nargs="*",
         default=("mse",),
         help="Metrics to report",
+    )
+
+    parser.add_argument(
+        "--kp_layer",
+        type=str,
+        default="com",
+        choices=["com", "linear"],
+        help="Keypoint layer module to use",
     )
 
     # Data
@@ -344,6 +352,7 @@ def get_model(args):
             network,
             args.num_keypoints,
             args.dim,
+            keypoint_layer=args.kp_layer,
             use_amp=args.use_amp,
             use_checkpoint=args.use_checkpoint,
             weight_keypoints=args.weighted_kp_align,

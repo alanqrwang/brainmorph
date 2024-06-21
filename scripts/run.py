@@ -19,13 +19,15 @@ from keymorph.utils import (
     initialize_wandb,
     save_dict_as_json,
 )
-from dataset import ixi, gigamed
-import scripts.gigamed_hyperparameters as gigamed_hps
-import scripts.ixi_hyperparameters as ixi_hps
-from scripts.train import run_train
-from scripts.pretrain import run_pretrain
-from scripts.pairwise_register_eval import run_eval
-from scripts.groupwise_register_eval import run_group_eval, run_long_eval
+from keymorph.viz_tools import imshow_img_and_points_3d
+
+from brainmorph.dataset import ixi, gigamed
+import brainmorph.scripts.gigamed_hyperparameters as gigamed_hps
+import brainmorph.scripts.ixi_hyperparameters as ixi_hps
+from brainmorph.scripts.train import run_train
+from brainmorph.scripts.pretrain import run_pretrain
+from brainmorph.scripts.pairwise_register_eval import run_eval
+from brainmorph.scripts.groupwise_register_eval import run_group_eval, run_long_eval
 
 
 def parse_args():
@@ -164,7 +166,7 @@ def parse_args():
         "--train_family_params",
         type=str,
         default="default",
-        choices=["default", "mse_only", "tps0_only"],
+        choices=["default", "mse_only", "tps0_only", "affine_only"],
         help="Type of training family parameters to use",
     )
 
@@ -483,6 +485,7 @@ def get_model(args):
             network,
             args.num_keypoints,
             args.dim,
+            keypoint_layer=args.kp_layer,
             use_amp=args.use_amp,
             use_checkpoint=args.use_checkpoint,
             max_train_keypoints=args.max_train_keypoints,
@@ -548,7 +551,7 @@ def main():
     # Checkpoint loading
     if args.resume_latest:
         args.resume = True
-        args.load_path = utils.get_latest_epoch_file(args.model_ckpt_dir)
+        args.load_path = utils.get_latest_epoch_file(args.model_ckpt_dir, args)
         if args.load_path is None:
             raise ValueError(
                 f"No checkpoint found to resume from: {args.model_ckpt_dir}"
@@ -732,7 +735,7 @@ def main():
         if args.resume:
             start_epoch = ckpt_state["epoch"] + 1
             # Load random keypoints from checkpoint
-            random_points = state["random_points"]
+            random_points = ckpt_state["random_points"]
         else:
             start_epoch = 1
             # Extract random keypoints from reference subject
@@ -740,19 +743,20 @@ def main():
             ref_img = ref_subject["img"][tio.DATA].float().unsqueeze(0)
             print("sampling random keypoints...")
             random_points = utils.sample_valid_coordinates(
-                ref_img, args.num_keypoints, args.dim
+                ref_img, args.num_keypoints, args.dim, point_space="norm", indexing="ij"
             )
+
             random_points = random_points * 2 - 1
             random_points = random_points.repeat(args.batch_size, 1, 1)
-            # if args.visualize:
-            #     show_warped_vol(
-            #         ref_img[0, 0].cpu().detach().numpy(),
-            #         ref_img[0, 0].cpu().detach().numpy(),
-            #         ref_img[0, 0].cpu().detach().numpy(),
-            #         random_points[0].cpu().detach().numpy(),
-            #         random_points[0].cpu().detach().numpy(),
-            #         random_points[0].cpu().detach().numpy(),
-            #     )
+            if args.visualize:
+                imshow_img_and_points_3d(
+                    ref_img[0, 0].cpu().detach().numpy(),
+                    random_points[0].cpu().detach().numpy(),
+                    suptitle="Reference subject img and points",
+                    projection=True,
+                    point_space="norm",
+                    keypoint_indexing="ij",
+                )
             del ref_subject
 
         for epoch in range(start_epoch, args.epochs + 1):
@@ -797,6 +801,8 @@ def main():
         if args.train_dataset in ["gigamed", "synthbrain"]:
             if args.train_family_params == "mse_only":
                 train_params = gigamed_hps.GIGAMED_FAMILY_TRAIN_PARAMS_MSE_ONLY
+            elif args.train_family_params == "affine_only":
+                train_params = gigamed_hps.GIGAMED_FAMILY_TRAIN_PARAMS_AFFINE_ONLY
             elif args.train_family_params == "tps0_only":
                 train_params = gigamed_hps.GIGAMED_FAMILY_TRAIN_PARAMS_TPS0_ONLY
             else:

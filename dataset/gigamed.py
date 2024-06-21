@@ -2,7 +2,7 @@ import os
 from torch.utils.data import DataLoader
 import pandas as pd
 
-from .utils import (
+from brainmorph.dataset.utils import (
     read_subjects_from_disk,
     SSSMPairedDataset,
     DSSMPairedDataset,
@@ -13,8 +13,8 @@ from .utils import (
     SimpleDatasetIterator,
 )
 
-id_csv_file = "/home/alw4013/keymorph/dataset/gigamed_id.csv"
-ood_csv_file = "/home/alw4013/keymorph/dataset/gigamed_ood.csv"
+id_csv_file = "/home/alw4013/brainmorph/dataset/gigamed_id.csv"
+ood_csv_file = "/home/alw4013/brainmorph/dataset/gigamed_ood.csv"
 
 
 class GigaMedPaths:
