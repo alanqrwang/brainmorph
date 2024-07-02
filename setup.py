@@ -18,7 +18,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=[
-        "keymorph>=1.0.2",
+        "keymorph>=2.0.0",
         "numpy>=1.19.1",
         "ogb>=1.2.6",
         "outdated>=0.2.0",
