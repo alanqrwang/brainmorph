@@ -13,7 +13,7 @@ from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 
 from keymorph.net import ConvNet
 from keymorph.model import KeyMorph
-from keymorph.utils import sample_valid_coordinates
+from keymorph.utils import sample_valid_coordinates, rescale_intensity
 from keymorph.viz_tools import imshow_img_and_points_3d
 
 from dataset import ixi, gigamed
@@ -347,6 +347,7 @@ def get_data(args):
             [
                 tio.CropOrPad(crop_dims, padding_mode=0, include=("img",)),
                 tio.CropOrPad(crop_dims, padding_mode=0, include=("seg",)),
+                tio.Lambda(rescale_intensity, include=("img",)),
             ]
         )
         gigamed_dataset = gigamed.GigaMed(
@@ -398,6 +399,7 @@ def get_data(args):
                 tio.Resample("img"),
                 tio.CropOrPad((256, 256, 256), padding_mode=0, include=("img",)),
                 tio.CropOrPad((256, 256, 256), padding_mode=0, include=("seg",)),
+                tio.Lambda(rescale_intensity, include=("img",)),
             ],
             include=("img", "seg"),
         )

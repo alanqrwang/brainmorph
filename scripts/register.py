@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 import torchio as tio
 from pathlib import Path
 
+from keymorph.utils import rescale_intensity
 from keymorph.model import KeyMorph
 from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 from keymorph.net import ConvNet
@@ -428,6 +429,7 @@ if __name__ == "__main__":
             tio.Resample("img"),
             tio.CropOrPad((256, 256, 256), padding_mode=0, include=("img",)),
             tio.CropOrPad((256, 256, 256), padding_mode=0, include=("seg",)),
+            tio.Lambda(rescale_intensity, include=("img",)),
         ],
         include=("img", "seg"),
     )
