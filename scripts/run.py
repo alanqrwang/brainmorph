@@ -13,21 +13,24 @@ from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 
 from keymorph.net import ConvNet
 from keymorph.model import KeyMorph
-from keymorph import utils
-from keymorph.utils import (
+from keymorph.utils import sample_valid_coordinates
+from keymorph.viz_tools import imshow_img_and_points_3d
+
+from dataset import ixi, gigamed
+import scripts.gigamed_hyperparameters as gigamed_hps
+import scripts.ixi_hyperparameters as ixi_hps
+from scripts.train import run_train
+from scripts.pretrain import run_pretrain
+from scripts.pairwise_register_eval import run_eval
+from scripts.groupwise_register_eval import run_group_eval, run_long_eval
+from scripts.script_utils import (
     ParseKwargs,
     initialize_wandb,
     save_dict_as_json,
+    summary,
+    get_latest_epoch_file,
+    load_checkpoint,
 )
-from keymorph.viz_tools import imshow_img_and_points_3d
-
-from brainmorph.dataset import ixi, gigamed
-import brainmorph.scripts.gigamed_hyperparameters as gigamed_hps
-import brainmorph.scripts.ixi_hyperparameters as ixi_hps
-from brainmorph.scripts.train import run_train
-from brainmorph.scripts.pretrain import run_pretrain
-from brainmorph.scripts.pairwise_register_eval import run_eval
-from brainmorph.scripts.groupwise_register_eval import run_group_eval, run_long_eval
 
 
 def parse_args():
@@ -492,7 +495,7 @@ def get_model(args):
             weight_keypoints=args.weighted_kp_align,
         )
         registration_model.to(args.device)
-        utils.summary(registration_model)
+        summary(registration_model)
     elif args.registration_model == "itkelastix":
         from baselines.itkelastix import ITKElastix
 
@@ -551,14 +554,14 @@ def main():
     # Checkpoint loading
     if args.resume_latest:
         args.resume = True
-        args.load_path = utils.get_latest_epoch_file(args.model_ckpt_dir, args)
+        args.load_path = get_latest_epoch_file(args.model_ckpt_dir, args)
         if args.load_path is None:
             raise ValueError(
                 f"No checkpoint found to resume from: {args.model_ckpt_dir}"
             )
     if args.load_path is not None:
         print(f"Loading checkpoint from {args.load_path}")
-        ckpt_state, registration_model, optimizer = utils.load_checkpoint(
+        ckpt_state, registration_model, optimizer = load_checkpoint(
             args.load_path,
             registration_model,
             optimizer,
@@ -742,7 +745,7 @@ def main():
             ref_subject = loaders["ref_subject"]
             ref_img = ref_subject["img"][tio.DATA].float().unsqueeze(0)
             print("sampling random keypoints...")
-            random_points = utils.sample_valid_coordinates(
+            random_points = sample_valid_coordinates(
                 ref_img, args.num_keypoints, args.dim, point_space="norm", indexing="ij"
             )
 

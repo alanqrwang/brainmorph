@@ -3,14 +3,17 @@ import torch
 import numpy as np
 import torchio as tio
 
-from keymorph import utils
-from keymorph.utils import (
-    align_img,
-    save_dict_as_json,
-)
+from keymorph.utils import align_img, one_hot_eval
 from keymorph.viz_tools import imshow_registration_2d, imshow_registration_3d
 from keymorph.augmentation import affine_augment
 import keymorph.loss_ops as loss_ops
+
+from scripts.script_utils import (
+    save_dict_as_json,
+    load_dict_from_json,
+    parse_test_aug,
+    parse_test_mod,
+)
 
 
 def run_eval(
@@ -39,8 +42,8 @@ def run_eval(
     test_metrics = _build_metric_dict(list_of_eval_names)
     for dataset_name in list_of_eval_names:
         for aug in list_of_eval_augs:
-            mod1, mod2 = utils.parse_test_mod(dataset_name)
-            param = utils.parse_test_aug(aug)
+            mod1, mod2 = parse_test_mod(dataset_name)
+            param = parse_test_aug(aug)
             for i in range(len(loaders[mod1])):
                 if args.early_stop_eval_subjects and i == args.early_stop_eval_subjects:
                     break
@@ -82,7 +85,7 @@ def run_eval(
                             f"Found metrics for all alignments, skipping running registration..."
                         )
                         all_metrics = {
-                            k: utils.load_dict_from_json(v)
+                            k: load_dict_from_json(v)
                             for k, v in all_metrics_paths.items()
                         }
 
@@ -99,8 +102,8 @@ def run_eval(
                                 moving["seg"][tio.DATA][None],
                             )
                             # One-hot encode segmentations
-                            seg_f = utils.one_hot_eval(seg_f)
-                            seg_m = utils.one_hot_eval(seg_m)
+                            seg_f = one_hot_eval(seg_f)
+                            seg_m = one_hot_eval(seg_m)
 
                         # Move to device
                         img_f = img_f.float().to(args.device)

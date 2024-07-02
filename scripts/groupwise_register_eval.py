@@ -5,13 +5,14 @@ import torchio as tio
 import shutil
 import matplotlib.pyplot as plt
 
-from keymorph import utils
-from keymorph.utils import (
-    align_img,
-    save_dict_as_json,
-)
+from keymorph.utils import align_img, one_hot_eval
 from keymorph.augmentation import random_affine_augment
 import keymorph.loss_ops as loss_ops
+
+from scripts.script_utils import (
+    save_dict_as_json,
+    parse_test_aug,
+)
 
 
 def run_long_eval(
@@ -54,7 +55,7 @@ def run_long_eval(
                 if not os.path.exists(groupseg_m_dir):
                     os.makedirs(groupseg_m_dir)
 
-            aug_params = utils.parse_test_aug(aug)
+            aug_params = parse_test_aug(aug)
             for i, group in enumerate(group_loader[dataset_name]):
                 if args.early_stop_eval_subjects and i == args.early_stop_eval_subjects:
                     break
@@ -67,7 +68,7 @@ def run_long_eval(
                     if args.seg_available:
                         seg_m = subject["seg"][tio.DATA].float().unsqueeze(0)
                         # One-hot encode segmentations
-                        seg_m = utils.one_hot_eval(seg_m)
+                        seg_m = one_hot_eval(seg_m)
 
                     # Randomly affine augment all images
                     if aug_params is not None:
@@ -196,7 +197,7 @@ def run_group_eval(
                     if not os.path.exists(groupseg_m_dir):
                         os.makedirs(groupseg_m_dir)
 
-                aug_params = utils.parse_test_aug(aug)
+                aug_params = parse_test_aug(aug)
                 print(
                     f"Running groupwise test: dataset {dataset_name}, aug {aug}, group size {group_size}"
                 )
@@ -208,7 +209,7 @@ def run_group_eval(
                     if args.seg_available:
                         seg_m = subject["seg"][tio.DATA].float()
                         # One-hot encode segmentations
-                        seg_m = utils.one_hot_eval(seg_m)
+                        seg_m = one_hot_eval(seg_m)
 
                     # Randomly affine augment all images
                     if aug_params is not None:

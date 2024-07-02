@@ -9,11 +9,12 @@ import torchio as tio
 from pathlib import Path
 
 from keymorph.model import KeyMorph
-from keymorph import utils
 from keymorph.unet3d.model import UNet2D, UNet3D, TruncatedUNet3D
 from keymorph.net import ConvNet
-from brainmorph.scripts.pairwise_register_eval import run_eval
-from brainmorph.scripts.groupwise_register_eval import run_group_eval
+
+from scripts.pairwise_register_eval import run_eval
+from scripts.groupwise_register_eval import run_group_eval
+from scripts import script_utils
 
 URL_DICT = {
     "foundation-numkey128-numlevels4.pth.tar": "https://drive.google.com/uc?id=1LaBdf11LXhNYAeSr2DBDwsSrQ2UwZ0DJ",
@@ -358,7 +359,7 @@ def get_model(args):
             weight_keypoints=args.weighted_kp_align,
         )
         registration_model.to(args.device)
-        utils.summary(registration_model)
+        script_utils.summary(registration_model)
     elif args.registration_model == "itkelastix":
         from baselines.itkelastix import ITKElastix
 
@@ -456,7 +457,7 @@ if __name__ == "__main__":
         download_model(args.load_path, download_flag=args.download)
     if args.load_path is not None:
         print(f"Loading checkpoint from {args.load_path}")
-        ckpt_state, registration_model = utils.load_checkpoint(
+        ckpt_state, registration_model = script_utils.load_checkpoint(
             args.load_path,
             registration_model,
             device=args.device,

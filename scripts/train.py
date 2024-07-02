@@ -5,11 +5,13 @@ import torchio as tio
 import time
 from torch.profiler import profile, record_function, ProfilerActivity
 
-import keymorph.utils as utils
+from keymorph.utils import one_hot, one_hot_subsampled_pair
 from keymorph.utils import align_img
 from keymorph.viz_tools import imshow_registration_2d, imshow_registration_3d
 from keymorph.augmentation import random_affine_augment
 import keymorph.loss_ops as loss_ops
+
+from scripts.script_utils import aggregate_dicts
 
 
 def run_train(train_loader, registration_model, optimizer, train_params, args):
@@ -49,12 +51,12 @@ def run_train(train_loader, registration_model, optimizer, train_params, args):
             seg_f, seg_m = fixed["seg"][tio.DATA], moving["seg"][tio.DATA]
             # One-hot encode segmentations
             if args.max_train_seg_channels is not None:
-                seg_f, seg_m = utils.one_hot_subsampled_pair(
+                seg_f, seg_m = one_hot_subsampled_pair(
                     seg_f.long(), seg_m.long(), args.max_train_seg_channels
                 )
             else:
-                seg_f = utils.one_hot(seg_f.long())
-                seg_m = utils.one_hot(seg_m.long())
+                seg_f = one_hot(seg_f.long())
+                seg_m = one_hot(seg_m.long())
 
         assert (
             img_f.shape == img_m.shape
@@ -237,6 +239,7 @@ def run_train(train_loader, registration_model, optimizer, train_params, args):
                     points_m[0].cpu().detach().numpy(),
                     points_f[0].cpu().detach().numpy(),
                     points_a[0].cpu().detach().numpy(),
+                    projection=True,
                     save_path=(
                         None
                         if args.debug_mode
@@ -253,6 +256,7 @@ def run_train(train_loader, registration_model, optimizer, train_params, args):
                         points_m[0].cpu().detach().numpy(),
                         points_f[0].cpu().detach().numpy(),
                         points_a[0].cpu().detach().numpy(),
+                        projection=True,
                         save_path=(
                             None
                             if args.debug_mode
@@ -262,4 +266,4 @@ def run_train(train_loader, registration_model, optimizer, train_params, args):
                         ),
                     )
 
-    return utils.aggregate_dicts(res)
+    return aggregate_dicts(res)
