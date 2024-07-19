@@ -5,7 +5,7 @@ import torchio as tio
 import shutil
 import matplotlib.pyplot as plt
 
-from keymorph.utils import align_img, one_hot_eval
+from keymorph.utils import align_img, one_hot_eval_synthseg
 from keymorph.augmentation import random_affine_augment
 import keymorph.loss_ops as loss_ops
 
@@ -68,7 +68,7 @@ def run_long_eval(
                     if args.seg_available:
                         seg_m = subject["seg"][tio.DATA].float().unsqueeze(0)
                         # One-hot encode segmentations
-                        seg_m = one_hot_eval(seg_m)
+                        seg_m = one_hot_eval_synthseg(seg_m)
 
                     # Randomly affine augment all images
                     if aug_params is not None:
@@ -209,7 +209,7 @@ def run_group_eval(
                     if args.seg_available:
                         seg_m = subject["seg"][tio.DATA].float()
                         # One-hot encode segmentations
-                        seg_m = one_hot_eval(seg_m)
+                        seg_m = one_hot_eval_synthseg(seg_m)
 
                     # Randomly affine augment all images
                     if aug_params is not None:
