@@ -13,8 +13,9 @@ BrainMorph is built on top of the [KeyMorph framework](https://github.com/alanqr
 Check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing) to get started!
 
 ## Updates
+- [May 2025] BrainMorph has been accepted at [MELBA](https://www.melba-journal.org/papers/2025:010.html)!  
 - [May 2024] The preprint for BrainMorph is available on [arXiv](https://arxiv.org/abs/2405.14019)!
-- [May 2024] Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i). Usage instructions under "Registering brain volumes" (paper to come!).
+- [May 2024] ~~Released full set of BrainMorph models on [Box](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i).~~ Download model weights under Model Weights below. Usage instructions under "Registering brain volumes" (paper to come!).
 
 ## Installation
 ```bash
@@ -22,6 +23,17 @@ git clone https://github.com/alanqrwang/brainmorph.git
 cd brainmorph
 pip install -e .
 ```
+
+## Model Weights
+[foundation-numkey128-numlevels4.pth.tar](https://drive.google.com/uc?id=1LaBdf11LXhNYAeSr2DBDwsSrQ2UwZ0DJ)  
+[foundation-numkey128-numlevels5.pth.tar](https://drive.google.com/uc?id=1J9A0F5O__xKKh77832nkUDI3YElkN74Q)  
+[foundation-numkey128-numlevels6.pth.tar](https://drive.google.com/uc?id=1kppCKSR3nAoKuNHwZhV4p0KceyAJVubO)  
+[foundation-numkey256-numlevels4.pth.tar](https://drive.google.com/uc?id=1iHBvSXH67Rlvng_7VHURjxmiWLhXsGvG)  
+[foundation-numkey256-numlevels5.pth.tar](https://drive.google.com/uc?id=1q-RqDCyLbiZF3WCJGtvRClhdbhpdcN4u)  
+[foundation-numkey256-numlevels6.pth.tar](https://drive.google.com/uc?id=1bUeeTucNw-wZGJ4iXz8uxDJUNx-_XpxM)  
+[foundation-numkey512-numlevels4.pth.tar](https://drive.google.com/uc?id=14ig3UzF2awqTwkIA49BXBBz3lQQS4JCn)  
+[foundation-numkey512-numlevels5.pth.tar](https://drive.google.com/uc?id=1_so52Z99EE0eMMXvqwIWK23GbzxDj-40)  
+[foundation-numkey512-numlevels6.pth.tar](https://drive.google.com/uc?id=16015bMeH7aG9jMknmtwpp2zxrreNq6_X)  
 
 ### Requirements
 The brainmorph package depends on the following requirements:
@@ -42,7 +54,7 @@ Running `pip install -e .` will automatically check for and install all of these
 
 ## Downloading Trained Weights
 The ``--download`` flag in the provided script will automatically download the corresponding model and place is in the folder specified by `--weights_dir` (see below commands).
-Otherwise, you can find all BrainMorph trained weights [here](https://cornell.box.com/s/2mw4ey1u7waqrpylnxf49rck7u3nnr7i) and manually place them in the folder specified by `--weights_dir`.
+Otherwise, you can find all BrainMorph trained weights under Model Weights section above and manually place them in the folder specified by `--weights_dir`.
 
 ## Registering brain volumes 
 To get started, check out the [colab tutorial](https://colab.research.google.com/drive/1w_vKuSziY6EJhBnjwLnaWO6GOtZ8HjDP?usp=sharing)!
